@@ -1,0 +1,7 @@
+/.idea
+/vendor
+.env
+.env.local
+.env.*.local
+.directory
+.phpunit.*

@@ -1,0 +1,19 @@
+<!--
+  ~ Copyright (c) 2018. by Jesse Rushlow - Geeshoe Development
+  ~ Use of this application is strictly prohibited. It may not be used, redistributed, reproduced,
+  ~ copied, sold, or modified by any party other than the copyright holder above.
+  ~ This application is to be used for in house use only.
+  -->
+
+<phpunit colors="true" backupGlobals="true" backupStaticAttributes="true">
+    <testsuites>
+        <testsuite name="UnitTests">
+            <directory>tests/UnitTests</directory>
+        </testsuite>
+    </testsuites>
+    <filter>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">./src</directory>
+        </whitelist>
+    </filter>
+</phpunit>
