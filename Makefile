@@ -10,12 +10,13 @@ help:  ## Display this help
 
 .PHONY: setup
 
-setup: files install build up## Setup the application
+setup: files install build## Setup the application
 
 .PHONY: files
 files:
 	mkdir -p ./src ./tests ./public ./routes ./templates
 	touch ./.env
+	cp ./.docker/env.dist ./.docker/.env
 
 ##@ Composer
 
