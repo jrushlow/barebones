@@ -4,6 +4,14 @@ networks:
   app:
 
 services:
+  workspace:
+    build:
+      context: ./workspace
+    image: ${COMPOSE_PROJECT_NAME}_workspace:latest
+    volumes:
+      - ../:/var/www/html
+    tty: true
+
   nginx:
     build:
       context: ./nginx

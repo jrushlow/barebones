@@ -21,3 +21,7 @@ up: ## Start docker containers
 .PHONY: down
 down: ## Stop and remove docker containers/networks
 	docker-compose -f $(COMPOSE_FILE) --project-directory ./.docker down
+
+.PHONY: workspace
+workspace: ## Run workspace container as developer
+	docker-compose -f $(COMPOSE_FILE) --project-directory ./.docker run workspace bash
