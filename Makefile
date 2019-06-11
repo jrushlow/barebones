@@ -6,29 +6,6 @@ BASEDIR := $(shell pwd)
 help:  ## Display this help
 	@awk 'BEGIN {FS = ":.*##"; printf "\nUsage:\n  make \033[36m<target>\033[0m\n"} /^[a-zA-Z_-]+:.*?##/ { printf "  \033[36m%-15s\033[0m %s\n", $$1, $$2 } /^##@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) } ' $(MAKEFILE_LIST)
 
-##@ Application
-
-.PHONY: setup
-
-setup: files install build## Setup the application
-
-.PHONY: files
-files:
-	mkdir -p ./src ./tests ./public ./routes ./templates
-	touch ./.env
-	cp ./.docker/env.dist ./.docker/.env
-
-##@ Composer
-
-install: vendor ## Run composer install
-
-outdated: ## Check is there are any outdated dependencies
-	composer outdated
-
-vendor: composer.json $(composer.lock)
-	composer validate
-	composer install
-
 ##@ Docker
 
 COMPOSE_FILE := $(BASEDIR)/.docker/docker-compose.yml

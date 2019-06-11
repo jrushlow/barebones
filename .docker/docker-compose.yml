@@ -1,16 +1,7 @@
 version: '3'
 
 networks:
-  front:
-    ipam:
-      driver: default
-      config:
-        - subnet: ${SUBNET_FRONT}
-  back:
-    ipam:
-      driver: default
-      config:
-        - subnet: ${SUBNET_BACK}
+  app:
 
 services:
   nginx:
@@ -18,17 +9,14 @@ services:
       context: ./nginx
     image: ${COMPOSE_PROJECT_NAME}_nginx:latest
     volumes:
-      - ../public:/var/www/public
+      - ../public:/var/www/html/public
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
       - ./nginx/sites/:/etc/nginx/sites-available
       - ./nginx/conf.d/:/etc/nginx/conf.d
     depends_on:
       - php-fpm
     networks:
-      front:
-        ipv4_address: ${NGINX_IP_FRONT}
-      back:
-        ipv4_address: ${NGINX_IP_BACK}
+      app:
     ports:
       - "80:80"
       - "443:443"
@@ -40,15 +28,18 @@ services:
         - PHP_VERSION=${PHP_VERSION}
     image: ${COMPOSE_PROJECT_NAME}_php-fpm:latest
     volumes:
-      - ../src:/var/www/src
-      - ../public:/var/www/public
-      - ../routes:/var/www/routes
-      - ../templates:/var/www/templates
-      - ../vendor:/var/www/vendor
-      - ../.env:/var/www/.env
+      - ../:/var/www/html
     networks:
-      back:
-        ipv4_address: ${PHP_IP_BACK}
+      app:
+
+  php-cli:
+    build:
+      context: ./php-cli
+    image: ${COMPOSE_PROJECT_NAME}_php_cli:latest
+    volumes:
+      - ../:/app
+    networks:
+      app:
 
   mariadb:
     build:
@@ -61,8 +52,7 @@ services:
       - MYSQL_PASSWORD=${MARIA_PASSWORD}
       - MYSQL_ROOT_PASSWORD=${MARIA_ROOT_PASSWORD}
     networks:
-      back:
-        ipv4_address: ${MARIADB_IP_BACK}
+      app:
     ports:
       - "${MARIADB_PORT}:3306"
     volumes:
